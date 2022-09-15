@@ -1,0 +1,11 @@
+@import "./base.css";
+
+.home-header {
+  padding: 0;
+  margin-bottom: 1rem;
+}
+
+.home-menu {
+  width: 200px;
+  margin-right: 0.5rem;
+}
