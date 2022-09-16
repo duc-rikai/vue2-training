@@ -11,37 +11,18 @@
         Form
       </el-button>
     </el-row>
-
-    <table class="table table-bordered">
-      <thead>
-        <tr class="align-middle text-center w-auto">
-          <th>Timepoint</th>
-          <th>Cloudcover</th>
-          <th>Seeing</th>
-          <th>Transparency</th>
-          <th>Lifted Index</th>
-          <th>Rh2m</th>
-          <th>Direction</th>
-          <th>Speed</th>
-          <th>Temp2m</th>
-          <th>Prec Type</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="astro in astros.dataseries" :key="astro.Id">
-          <td class="text-center">{{ astro.timepoint }}</td>
-          <td class="text-center">{{ astro.cloudcover }}</td>
-          <td class="text-center">{{ astro.seeing }}</td>
-          <td class="text-center">{{ astro.transparency }}</td>
-          <td class="text-center">{{ astro.lifted_index }}</td>
-          <td class="text-center">{{ astro.rh2m }}</td>
-          <td class="ps-3">{{ astro.wind10m.direction }}</td>
-          <td class="text-center">{{ astro.wind10m.speed }}</td>
-          <td class="text-center">{{ astro.temp2m }}</td>
-          <td class="ps-3">{{ astro.prec_type }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <el-table :data="astros.dataseries" border style="width: 100%">
+      <el-table-column prop="timepoint" label="Timepoint" />
+      <el-table-column prop="cloudcover" label="Cloudcover" />
+      <el-table-column prop="seeing" label="Seeing" />
+      <el-table-column prop="transparency" label="Transparency" />
+      <el-table-column prop="lifted_index" label="Lifted Index" />
+      <el-table-column prop="rh2m" label="Rh2m" />
+      <el-table-column prop="wind10m.direction" label="Direction" />
+      <el-table-column prop="wind10m.speed" label="Speed" />
+      <el-table-column prop="temp2m" label="Temp2m" />
+      <el-table-column prop="prec_type" label="Prec Type" />
+    </el-table>
 
     <ul v-if="errors && errors.length">
       <li v-for="error of errors" :key="error.id">
