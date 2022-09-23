@@ -11,6 +11,24 @@
         Form
       </el-button>
     </el-row>
+
+    <div class="table-info">
+      <h3>Table Infomation</h3>
+      <el-table :data="listInfo" border>
+        <el-table-column prop="name" label="Name" />
+        <el-table-column prop="birthday" label="Birthday">
+          {{ formatBirthday(formInline.birthday) }}
+        </el-table-column>
+        <el-table-column prop="age" label="Age">
+          {{ calculateAge(formInline.birthday) }}
+        </el-table-column>
+        <el-table-column prop="gender" label="Gender" />
+        <el-table-column prop="phone" label="Phone" />
+        <el-table-column prop="salary" label="Salary" />
+        <el-table-column prop="memo" label="Memo" />
+      </el-table>
+    </div>
+
     <el-table :data="astros.dataseries" border style="width: 100%">
       <el-table-column prop="timepoint" label="Timepoint" />
       <el-table-column prop="cloudcover" label="Cloudcover" />
@@ -101,6 +119,7 @@
                   style="width: 31rem"
                   type="number"
                   placeholder="Please enter your phone"
+                  class="input-phone"
                 />
               </el-form-item>
 
@@ -116,6 +135,16 @@
                   placeholder="Please enter your salary"
                 />
               </el-form-item>
+
+              <div v-if="formInline.gender == 'male'">
+                <el-form-item label="Memo:" prop="memo">
+                  <el-input
+                    type="textarea"
+                    v-model="formInline.memo"
+                    class="input-memo"
+                  />
+                </el-form-item>
+              </div>
             </el-form>
           </div>
 
@@ -141,6 +170,7 @@
 <script>
 import axios from "axios";
 import { vNumber } from "@coders-tm/vue-number-format";
+import moment from "moment";
 
 export default {
   props: {
@@ -159,9 +189,12 @@ export default {
         name: "",
         gender: "",
         birthday: "",
+        age: "",
         phone: "",
         salary: "",
+        memo: "",
       },
+      listInfo: [],
       number: {
         decimal: ".",
         separator: ",",
@@ -216,6 +249,12 @@ export default {
             trigger: "blur",
           },
         ],
+        memo: [
+          {
+            message: "Please enter your memo",
+            trigger: "blur",
+          },
+        ],
       },
     };
   },
@@ -251,7 +290,16 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert("submit!");
+          this.listInfo.push({
+            name: this.formInline.name,
+            birthday: this.formInline.birthday,
+            gender: this.formInline.gender,
+            phone: this.formInline.phone,
+            salary: this.formInline.salary,
+            memo: this.formInline.memo,
+          });
+          console.log(this.listInfo);
+          this.showModal = false;
         } else {
           console.log("error submit!!");
           return false;
@@ -283,6 +331,12 @@ export default {
       let difference = currentDate - birthDate;
       let age = Math.floor(difference / 31557600000);
       return age;
+    },
+
+    formatBirthday: function (birthday) {
+      if (birthday) {
+        return moment().format("DD/MM/YYYY");
+      }
     },
   },
 };
@@ -353,5 +407,26 @@ export default {
 
 .el-form-item {
   margin-bottom: 2rem;
+}
+
+.input-phone:deep() input[type="number"] {
+  -moz-appearance: textfield;
+}
+.input-phone:deep() input::-webkit-outer-spin-button,
+.input-phone:deep() input::-webkit-inner-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.input-memo {
+  width: 31rem;
+}
+.input-memo:deep() textarea {
+  height: 7.5rem;
+}
+
+.table-info {
+  margin: 2rem 0 3rem;
 }
 </style>
